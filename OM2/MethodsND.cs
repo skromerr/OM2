@@ -51,6 +51,12 @@ public abstract class MethodND
       sw.WriteLine($"{name};{coords[0].ToString()}; {eps}; {iters}; {funcCalc}; {coords[^1].ToString()}; {funcs[^1]}");
       sw.Close();
    }
+
+   public static void SaveCoords(List<Vector> coords, StreamWriter sw)
+   {
+      for (int i = 0; i < coords.Count; i++)
+         sw.WriteLine($"{coords[i][0]} {coords[i][1]}");
+   }
 }
 
 
@@ -117,8 +123,13 @@ public class MSG : MethodND
          corner.Add(crn);
       }
 
-      //Output(coords, funcs, dirs, corner, iter, funcCalc, lambdas, gradfs);
-      Issledovanie(coords, funcs, iter, funcCalc, eps, Name());
+      Console.WriteLine(iter);
+      Output(coords, funcs, dirs, corner, iter, funcCalc, lambdas, gradfs);
+      //Issledovanie(coords, funcs, iter, funcCalc, eps, Name());
+
+      StreamWriter sw = new("coords.txt");
+      SaveCoords(coords, sw);
+      sw.Close();
 
       return x0;
    }
@@ -144,7 +155,7 @@ public class MSG : MethodND
 
       for (int i = 0; i <= iters; i++)
       {
-         if (i > 0)
+         if (i > 0 && i < 100)
             sw.WriteLine($"{i}; {coords[i].ToString()}; {funcs[i]:F6}; {dirs[i].ToString()}; {lambdas[i - 1]:F6}; {Math.Abs(coords[i][0] - coords[i - 1][0]):F6}; " +
                $"{Math.Abs(coords[i][1] - coords[i - 1][1]):F6}; {Math.Abs(funcs[i] - funcs[i - 1]):F6}; {corners[i - 1]:F6}; {gradfs[i].ToString()}");
          if (i == 0)
@@ -181,14 +192,12 @@ public class Broyden : MethodND
       Matrix H = new(2);
       Matrix deltaH = new(2);
 
-      H[0, 0] = 1;
-      H[1, 1] = 1;
 
       for (iter = 0; iter < maxIter; iter++)
       {
          coords.Add(1 * x0);
 
-         if (iter % 2 == 0 && iter != 0)
+         if (iter % 2 == 0)
          {
             H.Clear();
             H[0, 0] = 1;
@@ -244,8 +253,13 @@ public class Broyden : MethodND
          corner.Add(crn);
       }
 
-      //Output(coords, funcs, dirs, corner, iter, funcCalc, lambdas, gradfs, matrices);
-      Issledovanie(coords, funcs, iter, funcCalc, eps, Name());
+      Console.WriteLine(iter);
+      Output(coords, funcs, dirs, corner, iter, funcCalc, lambdas, gradfs, matrices);
+      //Issledovanie(coords, funcs, iter, funcCalc, eps, Name());
+
+      StreamWriter sw = new("coords.txt");
+      SaveCoords(coords, sw);
+      sw.Close();
 
       return x0;
    }

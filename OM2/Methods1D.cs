@@ -1,4 +1,8 @@
-﻿namespace OM2;
+﻿using System.Drawing;
+using System.Reflection.Metadata.Ecma335;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace OM2;
 
 public static class Methods1D
 {
@@ -140,6 +144,38 @@ public static class Methods1D
 
       return lmbd;
    }
+
+   public static double QuadraticSearchNew((double, double) interval, Vector x, Func<Vector, double> f, Vector direction, ref int funcCalc)
+   {
+      double eps = 1e-7;
+      double f0, f1, f2, xk, x1, x2, b, c;
+      int iters;
+      double x0 = (interval.Item1 + interval.Item2) / 2;
+      double step = (interval.Item2 - interval.Item1) / 2;
+
+      for (iters = 0; iters < 1000; iters++)
+      {
+         x1 = x0 - step;
+         x2 = x0 + step;
+
+         f0 = f(x + x0 * direction);
+         f1 = f(x + x1 * direction);
+         f2 = f(x + x2 * direction);
+         funcCalc += 3;
+
+         xk = x0 - 0.5 * step * (f2 - f1) / (f2 - 2.0 * f0 + f1);
+
+         if (Math.Abs(xk - x0) < eps)
+         {
+            return xk;
+         }
+         else
+            x0 = xk;
+      }
+
+      return x0;
+   }
+   
 }
 
 

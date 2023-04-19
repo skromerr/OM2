@@ -20,5 +20,6 @@ public class RosenbrokeFunc : IFunc
 public class VariantFunc : IFunc
 {
    public double Func(Vector x)
-      => -(3 / (1 + Math.Pow((x[0] - 3) / 2, 2) + Math.Pow((x[1] - 2) / 1, 2)) + 1 / (1 + Math.Pow((x[0] - 3) / 1, 2) + Math.Pow((x[1] - 1) / 3, 2)));
+      => -(3 / (1 + Math.Pow((x[0] - 3) / 2, 2) + Math.Pow((x[1] - 2) / 1, 2)) 
+      + 1 / (1 + Math.Pow((x[0] - 3) / 1, 2) + Math.Pow((x[1] - 1) / 3, 2)));
 }
